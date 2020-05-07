@@ -22,27 +22,24 @@ yum install -y epel-release
 
 yum install strongswan openvpn
 
-附上打包好的rpm包[下载地址](https://github.com/Ostaer/FlexGW/releases/download/v1.1/flexgw-1.1.0-1.el7.centos.x86_64.rpm)
+附上打包好的rpm包[下载地址]()
 
 自己编译
 ```
 # yum install git
-# git clone https://github.com/Ostaer/FlexGW.git
-# yum install rpm-build python-pip zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel \
-openssl-devel xz xz-devel libffi-devel gcc gcc-c++
-# pip install python-build
+# git clone https://github.com/tomlinux/FlexGW
 # cd FlexGW/packaging/rpm/
 # sh mkrpm.sh
 ```
 
-部署参照原文档 [Deploy.md](https://github.com/Ostaer/FlexGW/blob/master/packaging/rpm/Deploy.md)
+部署参照原文档 [Deploy.md](https://github.com/tomlinux/FlexGW/blob/master/packaging/rpm/Deploy.md)
 
 软件组成
 ----------
 
 Strongswan
 
-* 版本：5.1.3 => 更新为 5.6.3
+* 版本：5.1.3 => 更新为 5.7.2
 * Website：http://www.strongswan.org
 
 

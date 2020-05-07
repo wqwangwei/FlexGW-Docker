@@ -16,6 +16,22 @@ if [ ! -f ./mkrpm.sh ]; then
     exit 1
 fi
 
+# 开启内核转发功能
+echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+sysctl -p
+
+# 编译依赖包
+
+yum install rpm-build python-pip zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel \
+openssl-devel xz xz-devel libffi-devel gcc gcc-c++  git  -y
+
+if ! `pip list | grep -q python-build`
+then
+	pip install python-build  -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+fi
+
+# https://github.com/meolu/walle-web/blob/master/admin.sh
+
 #create necessary directories
 mkdir -p /tmp/rpmbuild/SOURCES
 mkdir -p /tmp/rpmbuild/PYTHON/cache
@@ -24,7 +40,7 @@ mkdir -p /tmp/rpmbuild/PYTHON/sources
 [ -d /tmp/rpmbuild/SOURCES/flexgw ] && rm -rf /tmp/rpmbuild/SOURCES/flexgw
 
 #clone repositories
-git clone https://github.com/Ostaer/FlexGW.git /tmp/rpmbuild/SOURCES/flexgw
+git clone https://github.com/tomlinux/FlexGW /tmp/rpmbuild/SOURCES/flexgw
 
 #archive source from git repositories
 cd /tmp/rpmbuild/SOURCES/flexgw
