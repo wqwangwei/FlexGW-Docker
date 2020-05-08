@@ -87,3 +87,10 @@ OpenVPN启动方式
 启动命令为systemctl start openvpn-server@server.service(会读取/etc/openvpn/server/server.conf配置文件)
 
 server.conf 配置文件，由/usr/local/flexgw/website/vpn/dial/templates/dial 目录下的同名文件自动生成，请勿随便修改。
+
+Docker 镜像
+```
+docker run  --name flexgw6  -p 4443:443  -d   willclond/flexgw:v1
+```
+访问地址：https://ip:4443 
+
