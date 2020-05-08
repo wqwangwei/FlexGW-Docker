@@ -1,11 +1,10 @@
 #!/bin/bash
 
-yum install -y epel-release
-yum install strongswan openvpn
+
 
 source /etc/os-release
 
-if [[ $ID ~= centos7 ]] || [[ $ID ~= fedora ]] || [[ $ID ~= rhel ]]
+if [[ $ID =~  centos ]] || [[ $ID =~  fedora ]] || [[ $ID =~ rhel ]]
 then
 	echo "centos 7 是被支持的，请继续安装..... "
 else 
@@ -13,6 +12,35 @@ else
 	exit 1 
 fi
 
+
+echo "移除旧的strongwan 和openvpn 软件包"
+if [ -d /etc/strongswan ]
+then
+	ps uax | grep strongswan | grep -v grep | awk '{print $2}' | xargs kill 
+	yum -y  remove strongswan
+	rm -rf /etc/strongswan
+fi
+
+if [ -d /etc/openvpn ]
+then
+	ps uax | grep openvpn | grep -v grep | awk '{print $2}' | xargs kill 
+	yum -y remove openvpn
+	rm -rf /etc/openvpn
+fi
+
+
+
+if [ -d /usr/local/flexgw ]
+then
+	ps uax | grep flexgw | grep -v grep | awk '{print $2}' | xargs kill 
+	yum -y remove flexgw
+	rm -rf /usr/local/flexgw
+fi
+
+
+
+yum install -y epel-release
+yum install -y strongswan openvpn
 
 echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
 sysctl -p
@@ -36,3 +64,12 @@ ln -s /etc/init.d/initflexgw /etc/rc3.d/S98initflexgw
 
 echo "正在初始化证书和数据库文件请等会几分钟..........................."
 /etc/init.d/initflexgw 
+
+echo "flexgw 安装已经结束了"
+rm -f flexgw-1.1.0-1.el7.x86_64.rpm
+
+exit 0 
+
+
+
+
