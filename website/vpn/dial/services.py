@@ -248,7 +248,7 @@ def get_accounts(id=None, status=False):
                         account['vip'] = status['vip']
                         account['br'] = status['br']
                         account['bs'] = status['bs']
-                        account['ct'] = datetime.fromtimestamp(int(status['ct'])).strftime('%Y-%m-%d %H:%M:%S')
+                        account['ct'] = status['ct']
                         result.append(copy.deepcopy(account))
                 else:
                     result.append(copy.deepcopy(account))
