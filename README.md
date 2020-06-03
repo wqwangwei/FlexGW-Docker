@@ -89,6 +89,7 @@ OpenVPN启动方式
 server.conf 配置文件，由/usr/local/flexgw/website/vpn/dial/templates/dial 目录下的同名文件自动生成，请勿随便修改。
 
 Docker 镜像
+
 ```
 docker run  --name flexgw6  -p 4443:443  -d   willclond/flexgw:v1
 ```

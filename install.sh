@@ -16,14 +16,14 @@ fi
 echo "移除旧的strongwan 和openvpn 软件包"
 if [ -d /etc/strongswan ]
 then
-	ps uax | grep strongswan | grep -v grep | awk '{print $2}' | xargs kill 
+	ps uax | grep strongswan | grep -v grep | awk '{print $2}' | xargs kill -9  
 	yum -y  remove strongswan
 	rm -rf /etc/strongswan
 fi
 
 if [ -d /etc/openvpn ]
 then
-	ps uax | grep openvpn | grep -v grep | awk '{print $2}' | xargs kill 
+	ps uax | grep openvpn | grep -v grep | awk '{print $2}' | xargs kill -9  
 	yum -y remove openvpn
 	rm -rf /etc/openvpn
 fi
@@ -32,7 +32,7 @@ fi
 
 if [ -d /usr/local/flexgw ]
 then
-	ps uax | grep flexgw | grep -v grep | awk '{print $2}' | xargs kill 
+	ps uax | grep flexgw | grep -v grep | awk '{print $2}' | xargs kill -9 
 	yum -y remove flexgw
 	rm -rf /usr/local/flexgw
 fi

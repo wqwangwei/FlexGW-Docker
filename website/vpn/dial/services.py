@@ -22,7 +22,7 @@ from website.vpn.dial.helpers import exchange_maskint
 
 class VpnConfig(object):
     ''' read and set config for vpn config file.'''
-    conf_file = '/etc/openvpn/server.conf'
+    conf_file = '/etc/openvpn/server/server.conf'
     client_conf_file = '/usr/local/flexgw/rc/openvpn-client.conf'
 
     conf_template = 'dial/server.conf'
@@ -38,6 +38,19 @@ class VpnConfig(object):
             return data
         return None
 
+
+    def _get_cert_content(self):
+        try:
+            with open('/etc/openvpn/ca.crt','r+') as f:
+            data=f.read()
+        except Exception as e:
+            raise e
+        r
+        if data:
+            return data
+        return None
+
+
     def _commit_conf_file(self):
         r_data = self._get_settings()
         r_ipool = r_data.ipool
@@ -45,6 +58,8 @@ class VpnConfig(object):
         proto = r_data.proto
         c2c = r_data.c2c
         duplicate = r_data.duplicate
+        crt_content = self._get_cert_content()
+
         ipool = "%s %s" % (r_ipool.split('/')[0].strip(),
                            exchange_maskint(int(r_ipool.split('/')[1].strip())))
         subnets = ["%s %s" % (i.split('/')[0].strip(),
@@ -52,7 +67,7 @@ class VpnConfig(object):
                    for i in r_subnet.split(',')]
         server_data = render_template(self.conf_template, ipool=ipool, subnets=subnets,
                                       c2c=c2c, duplicate=duplicate, proto=proto)
-        client_data = render_template(self.client_conf_template, proto=proto)
+        client_data = render_template(self.client_conf_template, proto=proto,crt_content=crt_content)
         try:
             with open(self.conf_file, 'w') as f:
                 f.write(server_data)
