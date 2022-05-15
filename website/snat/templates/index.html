@@ -1,18 +1,18 @@
 {% extends "layout.html" %}
-{% block title %}SNAT 列表{% endblock %}
+{% block title %}{{ gettext('snat') }} {{ gettext('list') }}{% endblock %}
 
 {% block trail %}
-        <li><a href="/">Home</a></li>
-        <li><a href="{{ url_for('snat.index') }}">SNAT</a></li>
-        <li class="current"><a href="{{ url_for('snat.index') }}">SNAT 列表</a></li>
+        <li><a href="/">{{ gettext('home') }}</a></li>
+        <li><a href="{{ url_for('snat.index') }}">{{ gettext('snat') }} </a></li>
 {% endblock trail %}
 
 {% block content %}
     <!-- start of side-nav -->
     <div id="side-nav" class="large-2 columns">
       <ul class="side-nav">
-        <li class="active"><a href="{{ url_for('snat.index') }}"><i class="fi-list"> </i>SNAT 列表</a></li>
-        <li><a href="{{ url_for('snat.add') }}"><i class="fi-plus"> </i>SNAT 新增</a></li>
+        <li class="active"><a href="{{ url_for('snat.index') }}"><i class="fi-list"> </i>{{ gettext('snat') }} {{ gettext('list') }}</a></li>
+        <li><a href="{{ url_for('snat.add') }}"><i class="fi-plus"> </i>{{ gettext('snat') }} {{ gettext('add') }}</a></li>
+        <li><a href="{{ url_for('snat.console') }}"><i class="fi-wrench"> </i>{{ gettext('snat') }} {{ gettext('management') }}</a></li>
       </ul>
     </div>
     <!-- end of side-nav -->
@@ -34,9 +34,9 @@
           <table>
             <thead>
               <tr>
-                <th>需转换的源IP（或网段）</th>
-                <th>转换后的IP</th>
-                <th>操作</th>
+                <th>{{ gettext('need convert cidr') }}</th>
+                <th>{{ gettext('to source')}}</th>
+                <th>{{ gettext('operations') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -50,7 +50,7 @@
                     <input type="hidden" name="source" value="{{ source }}" />
                     <input type="hidden" name="gateway" value="{{ gateway }}" />
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                    <button class="button bitty alert snat-del">删除</button>
+                    <button class="button bitty alert snat-del">{{ gettext('delete') }}</button>
                   </form>
                 </td>
               </tr>

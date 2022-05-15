@@ -1,9 +1,9 @@
     <!-- start of side-nav -->
     <div id="side-nav" class="large-2 columns">
       {% set side_bar = [
-        ('sts.index', 'list', '隧道列表'),
-        ('sts.add', 'plus', '新增隧道'),
-        ('sts.console', 'wrench', 'VPN服务管理')
+        ('sts.index', 'list', gettext('tunnels list')),
+        ('sts.add', 'plus', gettext('create tunnel')),
+        ('sts.console', 'wrench', gettext('vpn server management'))
       ] -%}
       <ul class="side-nav">
         {% for endpoint, icon, caption in side_bar %}

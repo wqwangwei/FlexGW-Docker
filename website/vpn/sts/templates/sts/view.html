@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
-{% block title %} VPN Site-to-Site 修改隧道{% endblock %}
+{% block title %} {{ gettext('edit ipsec tunnel') }}{% endblock %}
 
 {% block trail %}
-        <li><a href="/">Home</a></li>
-        <li><a href="{{ url_for('sts.index') }}">VPN</a></li>
-        <li class="current"><a href="{{ url_for('sts.index') }}">Site-to-Site</a></li>
+        <li><a href="/">{{ gettext('home') }}</a></li>
+        <li><a href="{{ url_for('sts.index') }}">{{ gettext('vpn' )}}</a></li>
+        <li class="current"><a href="{{ url_for('sts.index') }}">{{ gettext('ip sec') }}</a></li>
 {% endblock trail %}
 
 {% block content %}
@@ -27,7 +27,7 @@
           <div class="large-3 columns">
             {{ form.tunnel_name.label(class="right inline") }}
           </div>
-          <div class="large-5 columns end">
+          <div class="large-5 columns">
             {% if form.tunnel_name.errors %}
             {{ form.tunnel_name(class="error", value=form.tunnel_name.value) }}
             <small class="error">{{ form.tunnel_name.errors[0] }}</small>
@@ -35,68 +35,137 @@
             {{ form.tunnel_name(value=tunnel.name) }}
             {% endif %}
           </div>
+          <div class="large-4 columns end">
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-3 columns">
+            {{ form.keyexchange.label(class="right inline") }}
+          </div>
+          <div class="large-5 columns">
+            {{ form.keyexchange }}
+          </div>
+          <div class="large-4 columns end">
+            {{ gettext('please be consisted with the other side') }}
+          </div>
         </div>
         <div class="row">
           <div class="large-3 columns">
             {{ form.start_type.label(class="right inline") }}
           </div>
-          <div class="large-5 columns end">
+          <div class="large-5 columns">
             {{ form.start_type }}
+          </div>
+          <div class="large-4 columns end">
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-3 columns">
+            {{ form.negotiation_mode.label(class="right inline") }}
+          </div>
+          <div class="large-5 columns">
+            {{ form.negotiation_mode }}
+          </div>
+          <div class="large-4 columns end">
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-3 columns">
+            {{ form.dpd_action.label(class="right inline") }}
+          </div>
+          <div class="large-5 columns">
+            {{ form.dpd_action }}
+          </div>
+          <div class="large-4 columns end">
           </div>
         </div>
         <div class="row">
           <div class="large-3 columns">
             {{ form.ike_encryption_algorithm.label(class="right inline") }}
           </div>
-          <div class="large-5 columns end">
+          <div class="large-5 columns">
             {{ form.ike_encryption_algorithm }}
+          </div>
+          <div class="large-4 columns end">
+            {{ gettext('please be consisted with the other side') }}
           </div>
         </div>
         <div class="row">
           <div class="large-3 columns">
             {{ form.ike_integrity_algorithm.label(class="right inline") }}
           </div>
-          <div class="large-5 columns end">
+          <div class="large-5 columns">
             {{ form.ike_integrity_algorithm }}
+          </div>
+          <div class="large-4 columns end">
+            {{ gettext('please be consisted with the other side') }}
           </div>
         </div>
         <div class="row">
           <div class="large-3 columns">
             {{ form.ike_dh_algorithm.label(class="right inline") }}
           </div>
-          <div class="large-5 columns end">
+          <div class="large-5 columns">
             {{ form.ike_dh_algorithm }}
+          </div>
+          <div class="large-4 columns end">
+            {{ gettext('please be consisted with the other side') }}
           </div>
         </div>
         <div class="row">
           <div class="large-3 columns">
             {{ form.esp_encryption_algorithm.label(class="right inline") }}
           </div>
-          <div class="large-5 columns end">
+          <div class="large-5 columns">
             {{ form.esp_encryption_algorithm }}
+          </div>
+          <div class="large-4 columns end">
+            {{ gettext('please be consisted with the other side') }}
           </div>
         </div>
         <div class="row">
           <div class="large-3 columns">
             {{ form.esp_integrity_algorithm.label(class="right inline") }}
           </div>
-          <div class="large-5 columns end">
+          <div class="large-5 columns">
             {{ form.esp_integrity_algorithm }}
+          </div>
+          <div class="large-4 columns end">
+            {{ gettext('please be consisted with the other side') }}
           </div>
         </div>
         <div class="row">
           <div class="large-3 columns">
             {{ form.esp_dh_algorithm.label(class="right inline") }}
           </div>
-          <div class="large-5 columns end">
+          <div class="large-5 columns">
             {{ form.esp_dh_algorithm }}
+          </div>
+          <div class="large-4 columns end">
+            {{ gettext('please be consisted with the other side') }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-3 columns">
+            {{ form.local_id.label(class="right inline") }}
+          </div>
+          <div class="large-5 columns">
+            {% if form.local_id.errors %}
+            {{ form.local_id(class="error") }}
+            <small class="error">{{ form.local_id.errors[0] }}</small>
+            {% else %}
+            {{ form.local_id }}
+            {% endif %}
+          </div>
+          <div class="large-4 columns end">
+            {{ gettext('please be consisted with "remote id" of the other side') }}
           </div>
         </div>
         <div class="row">
           <div class="large-3 columns">
             {{ form.local_subnet.label(class="right inline") }}
           </div>
-          <div class="large-5 columns end">
+          <div class="large-5 columns">
             {% if form.local_subnet.errors %}
             {{ form.local_subnet(class="error") }}
             <small class="error">{{ form.local_subnet.errors[0] }}</small>
@@ -104,12 +173,30 @@
             {{ form.local_subnet }}
             {% endif %}
           </div>
+          <div class="large-4 columns end">
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-3 columns">
+            {{ form.remote_id.label(class="right inline") }}
+          </div>
+          <div class="large-5 columns">
+            {% if form.remote_id.errors %}
+            {{ form.remote_id(class="error") }}
+            <small class="error">{{ form.remote_id.errors[0] }}</small>
+            {% else %}
+            {{ form.remote_id }}
+            {% endif %}
+          </div>
+          <div class="large-4 columns end">
+            {{ gettext('please be consisted with "local id" of the other side') }}
+          </div>
         </div>
         <div class="row">
           <div class="large-3 columns">
             {{ form.remote_ip.label(class="right inline") }}
           </div>
-          <div class="large-5 columns end">
+          <div class="large-5 columns">
             {% if form.remote_ip.errors %}
             {{ form.remote_ip(class="error", value=form.remote_ip.value) }}
             <small class="error">{{ form.remote_ip.errors[0] }}</small>
@@ -117,12 +204,14 @@
             {{ form.remote_ip(value=tunnel.rules.right) }}
             {% endif %}
           </div>
+          <div class="large-4 columns end">
+          </div>
         </div>
         <div class="row">
           <div class="large-3 columns">
             {{ form.remote_subnet.label(class="right inline") }}
           </div>
-          <div class="large-5 columns end">
+          <div class="large-5 columns">
             {% if form.remote_subnet.errors %}
             {{ form.remote_subnet(class="error") }}
             <small class="error">{{ form.remote_subnet.errors[0] }}</small>
@@ -130,18 +219,22 @@
             {{ form.remote_subnet }}
             {% endif %}
           </div>
+          <div class="large-4 columns end">
+          </div>
         </div>
         <div class="row">
           <div class="large-3 columns">
             {{ form.psk.label(class="right inline") }}
           </div>
-          <div class="large-5 columns end">
+          <div class="large-5 columns">
             {% if form.psk.errors %}
             {{ form.psk(class="error", value=form.psk.value) }}
             <small class="error">{{ form.psk.errors[0] }}</small>
             {% else %}
             {{ form.psk(value=tunnel.psk) }}
             {% endif %}
+          </div>
+          <div class="large-4 columns end">
           </div>
         </div>
 

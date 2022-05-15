@@ -100,6 +100,9 @@ ul.square, ol {
 /* -----------------------------------------
    For content, table
 ----------------------------------------- */
+#content {
+  min-height: 400px;
+}
 table.columns {
   border-spacing: 0;
   padding: 0;
@@ -225,4 +228,91 @@ a.box-link {
 ----------------------------------------- */
 .panel img {
   margin-bottom: 10px;
+}
+
+#bottom-ads {
+  width: 100%;
+  height: 90px;
+}
+
+#top-ads {
+  width: 100%;
+  height:60px;
+  float:right;
+}
+
+.news-carousel .img-container {
+  text-align: left;
+  color: #fff;
+  padding: 10px;
+  /*padding-right: 250px;*/
+  font-size: 16px;
+  line-height: 38px;
+  width: 100%;
+  height: 90px;
+}
+
+.news-carousel .img-container > div:nth-child(1) {
+  font-size: 30px;
+}
+.news-carousel .img-container > div:nth-child(3) {
+  text-align: center;
+  line-height: 32px;
+  border: 1px solid #fff;
+  width: 200px;
+  /*margin-top: 10px;*/
+  cursor: pointer;
+}
+
+.news-carousel .carousel-indicators {
+  top: 200px;
+}
+
+.news-carousel .left.carousel-control {
+  display: none;
+}
+
+.news-carousel .right.carousel-control {
+  display: none;
+}
+
+.top-carousel .img-container {
+  text-align: left;
+  color: #fff;
+  padding: 10px;
+  /*padding-right: 250px;*/
+  font-size: 10px;
+  /*line-height: 38px;*/
+  width: 100%;
+  height: 62px;
+  overflow: hidden;
+}
+
+.top-carousel .img-container > div:nth-child(1) {
+  font-size: 14px;
+  overflow: hidden;
+}
+.top-carousel .img-container > div:nth-child(3) {
+  text-align: center;
+  border: 1px solid #fff;
+  width: 200px;
+  overflow:hidden;
+  /*margin-top: 10px;*/
+  cursor: pointer;
+}
+
+.top-carousel .carousel-indicators {
+  top: 200px;
+}
+
+.top-carousel .left.carousel-control {
+  display: none;
+}
+
+.top-carousel .right.carousel-control {
+  display: none;
+}
+
+.orbit-progress {
+  display: none;
 }

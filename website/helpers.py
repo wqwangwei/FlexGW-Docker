@@ -19,3 +19,11 @@ def log_request(sender, **extra):
 
 def log_exception(sender, exception, **extra):
     sender.logger.error('[Exception Request]: %s', exception)
+
+
+def to_dict(sqlalchemy_object):
+    d = {}
+    for column in sqlalchemy_object.__table__.columns:
+        d[column.name] = getattr(sqlalchemy_object, column.name)
+
+    return d

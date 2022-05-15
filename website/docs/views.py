@@ -9,8 +9,9 @@
 
 
 from flask import Blueprint, render_template
+from flask.ext.login import login_required, current_user
 
-from flask.ext.login import login_required
+from website.account.models import UserDetails
 
 
 docs = Blueprint('docs', __name__, url_prefix='/docs',
@@ -21,46 +22,61 @@ docs = Blueprint('docs', __name__, url_prefix='/docs',
 @docs.route('/')
 @login_required
 def index():
-    return render_template('docs/guide.html')
+    user_details = UserDetails.query.get(current_user.username)
+    return render_template('docs/%s/guide.html' % user_details.language)
 
 
 @docs.route('/ipsec')
 @login_required
 def ipsec():
-    return render_template('docs/ipsec.html')
+    user_details = UserDetails.query.get(current_user.username)
+    return render_template('docs/%s/ipsec.html' % user_details.language)
 
 
 @docs.route('/dial')
 @login_required
 def dial():
-    return render_template('docs/dial.html')
+    user_details = UserDetails.query.get(current_user.username)
+    return render_template('docs/%s/dial.html' % user_details.language)
 
 
 @docs.route('/snat')
 @login_required
 def snat():
-    return render_template('docs/snat.html')
+    user_details = UserDetails.query.get(current_user.username)
+    return render_template('docs/%s/snat.html' % user_details.language)
+
+
+@docs.route('/tcp')
+@login_required
+def tcp():
+    user_details = UserDetails.query.get(current_user.username)
+    return render_template('docs/%s/tcp.html' % user_details.language)
 
 
 @docs.route('/certificate')
 @login_required
 def certificate():
-    return render_template('docs/certificate.html')
+    user_details = UserDetails.query.get(current_user.username)
+    return render_template('docs/%s/certificate.html' % user_details.language)
 
 
 @docs.route('/debug')
 @login_required
 def debug():
-    return render_template('docs/debug.html')
+    user_details = UserDetails.query.get(current_user.username)
+    return render_template('docs/%s/debug.html' % user_details.language)
 
 
 @docs.route('/update')
 @login_required
 def update():
-    return render_template('docs/update.html')
+    user_details = UserDetails.query.get(current_user.username)
+    return render_template('docs/%s/update.html' % user_details.language)
 
 
 @docs.route('/changelog')
 @login_required
 def changelog():
-    return render_template('docs/changelog.html')
+    user_details = UserDetails.query.get(current_user.username)
+    return render_template('docs/%s/changelog.html' % user_details.language)

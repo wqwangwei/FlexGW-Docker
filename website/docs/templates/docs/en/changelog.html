@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block title %}Docs{% endblock %}
+
+{% block trail %}
+        <li><a href="/">Home</a></li>
+        <li>Docs</li>
+        <li class="current"><a href="{{ url_for('docs.changelog') }}">ChangeLog</a></li>
+{% endblock trail %}
+
+{% block content %}
+    {% include "docs/en/sidenav.html" %}
+
+    <!-- start of issue table -->
+    <div class="large-10 columns">
+      <div class="row">
+        <div class="large-12 columns">
+          <div class="panel">
+            <h3>ChangeLog</h3>
+            <hr />
+            <h5>1.2.0 － 2015.09.09</h5>
+            <ul>
+              <li>It supports TCP tunneling</li>
+            </ul>
+            <h5>1.1.0 － 2014.10.11</h5>
+            <ul>
+              <li>Dial-up VPN: when checking and modifying accounts, passwords hidden by default, supports manual display.</li>
+              <li>Dial-up VPN: support can be configured to communicate between the client, single account multiple clients simultaneously online.</li>
+              <li>Dial-up VPN: configurable communication protocol "UDP" or "TCP".</li>
+              <li>Update document describes, increase network environment Classic case scenarios.</li>
+            </ul>
+            <h5>1.0.0 － 2014.09.05</h5>
+            <ul>
+              <li>The first release that supports IPSec VPN, dial-up VPN, SNAT function.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end of issue table -->
+{% endblock content %}

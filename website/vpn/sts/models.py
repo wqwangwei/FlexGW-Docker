@@ -22,11 +22,14 @@ class Tunnels(db.Model):
     psk = db.Column(db.String(80))
     created_at = db.Column(db.DateTime)
 
-    def __init__(self, name, rules, psk, created_at=datetime.now()):
+    def __init__(self, name, rules, psk, created_at=None):
         self.name = name
         self.rules = rules
         self.psk = psk
-        self.created_at = created_at
+        if created_at is None:
+            self.created_at = datetime.now()
+        else:
+            self.created_at = created_at
 
     def __repr__(self):
         return '<Tunnels %s:%s>' % (self.name, self.created_at)

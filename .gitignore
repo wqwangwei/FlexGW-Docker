@@ -2,6 +2,7 @@
 *.py[cod]
 
 # logs
+.DS_Store
 *.swp
 *.log
 *.pid

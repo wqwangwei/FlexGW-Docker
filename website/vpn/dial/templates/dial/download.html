@@ -2,9 +2,9 @@
 {% block title %}VPN Dial{% endblock title%}
 
 {% block trail %}
-        <li><a href="/">Home</a></li>
-        <li>VPN</li>
-        <li class="current"><a href="{{ url_for('dial.index') }}">Dial</a></li>
+        <li><a href="/">{{ gettext('home') }}</a></li>
+        <li>{{ gettext('vpn') }}</li>
+        <li class="current"><a href="{{ url_for('dial.index') }}">{{ gettext('dial') }}</a></li>
 {% endblock trail %}
 
 {% block content %}
@@ -23,20 +23,30 @@
       {% endif %}
       {% endwith %}
       <div data-alert class="alert-box info">
-        注意：「配置」文件下载后，请将配置文件中的「remote IP」字段修改为本机所绑定的IP 地址。
+        {{ gettext('notice: after download config file, replace the "EIP" with public ip of your server.') }}
       </div>
       <table>
         <thead>
           <tr>
-            <th>说明</th>
-            <th>客户端</th>
-            <th>配置文件</th>
+            <th>{{ gettext('description') }}</th>
+            <th>{{ gettext('client') }}</th>
+            <th>{{ gettext('config') }}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Installer, Windows 7 and later</td>
-            <td><a href="{{ url_for('dial.static', filename='openvpn-install-2.4.6-I602.exe') }}">openvpn-install-2.4.6-I602.exe</a></td>
+            <td>Windows 64-bit MSI installer</td>
+            <td><a href="https://hualv-hm.oss-cn-beijing.aliyuncs.com/tools/openvpn/OpenVPN-2.5.6-I605-x86.msi">OpenVPN-2.5.6-I605-x86.msi</a></td>
+            <td><a href="{{ url_for('dial.static', filename='windows-openvpn-client.zip') }}">windows-openvpn-client.zip</a></td>
+          </tr>
+          <tr>
+            <td>Windows 32-bit MSI installer</td>
+            <td><a href="https://hualv-hm.oss-cn-beijing.aliyuncs.com/tools/openvpn/OpenVPN-2.5.6-I605-amd64.msi">OpenVPN-2.5.6-I605-amd64.msi</a></td>
+            <td><a href="{{ url_for('dial.static', filename='windows-openvpn-client.zip') }}">windows-openvpn-client.zip</a></td>
+          </tr>
+          <tr>
+            <td>Windows ARM64 MSI installer</td>
+            <td><a href="https://hualv-hm.oss-cn-beijing.aliyuncs.com/tools/openvpn/OpenVPN-2.5.6-I605-arm64.msi">OpenVPN-2.5.6-I605-arm64.msi</a></td>
             <td><a href="{{ url_for('dial.static', filename='windows-openvpn-client.zip') }}">windows-openvpn-client.zip</a></td>
           </tr>
           <tr>

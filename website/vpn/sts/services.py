@@ -12,6 +12,7 @@ import sys
 import time
 
 from flask import render_template, flash, current_app
+from flask.ext.babel import gettext
 
 from website import db
 from website.services import exec_command
@@ -115,7 +116,7 @@ class VpnServer(object):
         except:
             current_app.logger.error('[Ipsec Services]: exec_command error: %s:%s',
                                      cmd, sys.exc_info()[1])
-            flash(u'VPN 程序异常，无法调用，请排查操作系统相关设置！', 'alert')
+            flash(gettext('Strongswan crashed, please contact your system administrator!'), 'alert')
             return False
         #: store cmd info
         self.cmd = cmd
@@ -126,7 +127,7 @@ class VpnServer(object):
         if r['return_code'] == 0:
             return True
         if message:
-            flash(message % r['stderr'], 'alert')
+            flash(message + r['stderr'], 'alert')
         current_app.logger.error('[Ipsec Services]: exec_command return: %s:%s:%s',
                                  cmd, r['return_code'], r['stderr'])
         return False
@@ -140,55 +141,54 @@ class VpnServer(object):
         except IndexError:
             current_app.logger.error('[Ipsec Services]: exec_command return: %s:%s:%s:%s',
                                      cmd, self.c_code, self.c_stdout, self.c_stderr)
-            flash(u'命令已执行，但是没有返回数据。', 'alert')
+            flash(gettext('command has been executed but no data retrived.'), 'alert')
             return False
         #: check return status
-        if 'successfully' in r:
+        if self.c_code == 0 and "failed" not in r:
             return True
         else:
             current_app.logger.error('[Ipsec Services]: exec_command return: %s:%s:%s:%s',
                                      cmd, self.c_code, self.c_stdout, self.c_stderr)
-            message = u'命令已执行，但是没有返回成功状态：%s' % r
-            flash(message, 'alert')
+            flash(message + " ".join(self.c_stderr), 'alert')
             return False
 
     def _reload_conf(self):
         cmd = ['strongswan', 'reload']
-        message = u"VPN 服务配置文件重载失败！%s"
+        message = gettext('vpn config file reload failed!')
         return self._exec(cmd, message)
 
     def _rereadsecrets(self):
         cmd = ['strongswan', 'rereadsecrets']
-        message = u"VPN 服务密钥文件重载失败！%s"
+        message = gettext('vpn secret file reload failed!')
         return self._exec(cmd, message)
 
     @property
     def start(self):
         if self.status:
-            flash(u'服务已经启动！', 'info')
+            flash(gettext('strongswan already started!'), 'info')
             return False
         cmd = ['strongswan', 'start']
-        message = u"VPN 服务启动失败：%s"
+        message = gettext('strongswan start failed!')
         return self._exec(cmd, message)
 
     @property
     def stop(self):
         if not self.status:
-            flash(u'服务已经停止！', 'info')
+            flash(gettext('strongswan already stopped!'), 'info')
             return False
         cmd = ['strongswan', 'stop']
-        message = u"VPN 服务停止失败：%s"
+        message = gettext('strongswan stop failed!')
         return self._exec(cmd, message)
 
     @property
     def reload(self):
         tunnel = VpnConfig()
         if not tunnel.commit():
-            message = u'VPN 服务配置文件修改失败，请重试。'
+            message = gettext('vpn config files reload failed, please retry!')
             flash(message, 'alert')
             return False
         if not self.status:
-            flash(u'设置成功！VPN 服务未启动，请通过「VPN服务管理」启动VPN 服务。', 'alert')
+            flash(gettext('vpn config files reload successed, but strongswan is not running.'), 'alert')
             return False
         if self._reload_conf() and self._rereadsecrets():
             return True
@@ -209,18 +209,18 @@ class VpnServer(object):
 
     def tunnel_up(self, tunnel_name):
         if self.tunnel_status(tunnel_name):
-            flash(u'隧道已经连接！', 'info')
+            flash(gettext('tunnel already up.'), 'info')
             return False
         cmd = ['strongswan', 'up', tunnel_name]
-        message = u"隧道启动失败：%s"
+        message = gettext('tunnel start failed:')
         return self._tunnel_exec(cmd, message)
 
     def tunnel_down(self, tunnel_name):
         if not self.tunnel_status(tunnel_name):
-            flash(u'隧道已经断开！', 'info')
+            flash(gettext('tunnel already down.'), 'info')
             return False
         cmd = ['strongswan', 'down', tunnel_name]
-        message = u"隧道停止失败：%s"
+        message = gettext('tunnel stop failed:')
         return self._tunnel_exec(cmd, message)
 
     def tunnel_traffic(self, tunnel_name):
@@ -259,10 +259,12 @@ def vpn_settings(form, tunnel_id=None):
         esp = '%s-%s-%s' % (form.esp_encryption_algorithm.data, form.esp_integrity_algorithm.data, form.esp_dh_algorithm.data)
     ike = '%s-%s-%s' % (form.ike_encryption_algorithm.data, form.ike_integrity_algorithm.data, form.ike_dh_algorithm.data)
     rules = {'left': '0.0.0.0', 'leftsubnet': local_subnet,
-             'leftid': form.tunnel_name.data, 'right': form.remote_ip.data,
-             'rightsubnet': remote_subnet, 'rightid': form.tunnel_name.data,
+             'leftid': form.local_id.data, 'right': form.remote_ip.data,
+             'rightsubnet': remote_subnet, 'rightid': form.remote_id.data,
              'authby': 'secret', 'esp': esp,
-             'ike': ike, 'auto': form.start_type.data}
+             'ike': ike, 'auto': form.start_type.data,
+             'aggressive': form.negotiation_mode.data, 'dpdaction': form.dpd_action.data,
+             'keyexchange': form.keyexchange.data}
     if tunnel.update_tunnel(tunnel_id, form.tunnel_name.data, json.dumps(rules),
                             form.psk.data) and vpn.reload:
         return True

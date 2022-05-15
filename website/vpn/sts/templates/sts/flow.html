@@ -6,27 +6,27 @@
 {% endblock head %}
 
 {% block trail %}
-        <li><a href="/">Home</a></li>
-        <li><a href="{{ url_for('sts.index') }}">VPN</a></li>
-        <li class="current"><a href="{{ url_for('sts.flow', id=tunnel.id) }}">实时流量</a></li>
+        <li><a href="/">{{ gettext('home') }}</a></li>
+        <li><a href="{{ url_for('sts.index') }}">{{ gettext('vpn' )}}</a></li>
+        <li class="current"><a href="{{ url_for('sts.flow', id=tunnel.id) }}">{{ gettext('flow') }}</a></li>
 {% endblock trail %}
 
 {% block content %}
     <!-- start of side nav -->
     <div class="large-2 columns">
-      <span class="label">隧道信息</span>
+      <span class="label">{{ gettext('tunnel info') }}</span>
       <ul class="square">
-        <li>隧道ID：{{ tunnel.name }}</li>
-        <li>状态：
+        <li>{{ gettext('tunnel id') }}: {{ tunnel.name }}</li>
+        <li>{{ gettext('status') }}:
           {% if tunnel.status %}
-          <span class="success label">Online</span>
+          <span class="success label">{{ gettext('online') }}</span>
           {% else %}
-          <span class="secondary label">Offline</span>
+          <span class="secondary label">{{ gettext('offline') }}</span>
           {% endif %}
         </li>
-        <li>本端子网：{{ tunnel.rules.leftsubnet }}</li>
-        <li>对端EIP：{{ tunnel.rules.right }}</li>
-        <li>对端子网：{{ tunnel.rules.rightsubnet }}</li>
+        <li>{{ gettext('local cidr') }}: {{ tunnel.rules.leftsubnet }}</li>
+        <li>{{ gettext('remote ip') }}: {{ tunnel.rules.right }}</li>
+        <li>{{ gettext('remote cidr') }}: {{ tunnel.rules.rightsubnet }}</li>
       </ul>
     </div>
     <!-- end of side nav -->
@@ -38,7 +38,7 @@
     <!-- end of flow div -->
 {% endblock content %}
 {% block jsplugin %}
-<script src="{{ url_for('static', filename='js/vendor/d3.v3.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vendor/d3.v3.min.js') }}" charset="utf-8"></script>
 <script src="{{ url_for('static', filename='js/vendor/epoch.0.5.2.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/flow.js') }}"></script>
 <script>

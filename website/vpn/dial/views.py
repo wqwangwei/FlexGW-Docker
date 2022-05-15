@@ -15,7 +15,9 @@ from flask import url_for, redirect
 from flask import flash
 
 from flask.ext.login import login_required
+from flask.ext.babel import gettext
 
+from website import __version__
 from website.vpn.dial.services import get_accounts, account_update, account_del
 from website.vpn.dial.services import VpnServer, settings_update
 from website.vpn.dial.forms import AddForm, SettingsForm, ConsoleForm
@@ -32,8 +34,8 @@ dial = Blueprint('dial', __name__, url_prefix='/vpn/dial',
 def index():
     accounts = get_accounts(status=True)
     if not accounts:
-        flash(u'目前没有任何VPN 配置，如有需要请添加。', 'info')
-    return render_template('dial/index.html', accounts=accounts)
+        flash(gettext('there is no vpn config yet.'), 'info')
+    return render_template('dial/index.html', accounts=accounts, version=__version__)
 
 
 @dial.route('/add', methods=['GET', 'POST'])
@@ -41,19 +43,19 @@ def index():
 def add():
     settings = Settings.query.get(1)
     if not settings:
-        flash(u'提示：请先进行「设置」再添加VPN 账号。', 'alert')
+        flash('notice: please config vpn before add account.', 'alert')
         return redirect(url_for('dial.settings'))
     form = AddForm()
     if form.validate_on_submit():
         if not Account.query.filter_by(name=form.name.data).first():
             if account_update(form):
-                message = u'添加VPN 拨号账号成功！'
+                message = gettext('add vpn account successed.')
                 flash(message, 'success')
                 return redirect(url_for('dial.index'))
         else:
-            message = u'该账号已经存在：%s' % form.name.data
+            message = gettext('the account is exist: %(account)s', account=form.name.data)
             flash(message, 'alert')
-    return render_template('dial/add.html', form=form)
+    return render_template('dial/add.html', form=form, version=__version__)
 
 
 @dial.route('/settings', methods=['GET', 'POST'])
@@ -63,14 +65,14 @@ def settings():
     settings = Settings.query.get(1)
     if form.validate_on_submit():
         if settings_update(form):
-            flash(u'修改配置成功！注：修改「虚拟IP 地址池」之后，需手工调整相应的SNAT 设置！', 'success')
+            flash(gettext('vpn config update successed!'), 'success')
             return redirect(url_for('dial.settings'))
     if settings:
         form.subnet.data = settings.subnet
         form.c2c.data = 'yes' if settings.c2c else 'no'
         form.duplicate.data = 'yes' if settings.duplicate else 'no'
         form.proto.data = settings.proto
-    return render_template('dial/settings.html', settings=settings, form=form)
+    return render_template('dial/settings.html', settings=settings, form=form, version=__version__)
 
 
 @dial.route('/<int:id>/settings', methods=['GET', 'POST'])
@@ -81,14 +83,14 @@ def id_settings(id):
     if form.validate_on_submit():
         if form.delete.data:
             if account_del(id):
-                message = u'删除账号%s ：成功！' % account[0]['name']
+                message = gettext('account deleted: %(account)s', account=account[0]['name'])
                 flash(message, 'success')
                 return redirect(url_for('dial.index'))
         if form.save.data:
             if account_update(form, id):
-                flash(u'修改账号配置成功！', 'success')
+                flash(gettext('update account successed'), 'success')
                 return redirect(url_for('dial.id_settings', id=id))
-    return render_template('dial/view.html', account=account[0], form=form)
+    return render_template('dial/view.html', account=account[0], form=form, version=__version__)
 
 
 @dial.route('/console', methods=['GET', 'POST'])
@@ -98,16 +100,16 @@ def console():
     vpn = VpnServer()
     if form.validate_on_submit():
         if form.stop.data and vpn.stop:
-            flash(u'VPN 服务停止成功！', 'success')
+            flash(gettext('vpn service stopped!'), 'success')
         if form.start.data and vpn.start:
-            flash(u'VPN 服务启动成功！', 'success')
+            flash(gettext('vpn service started!'), 'success')
         if form.re_load.data and vpn.reload:
-            flash(u'VPN 服务配置生效完成！', 'success')
+            flash(gettext('vpn service reloaded!'), 'success')
         return redirect(url_for('dial.console'))
-    return render_template('dial/console.html', status=vpn.status, form=form)
+    return render_template('dial/console.html', status=vpn.status, form=form, version=__version__)
 
 
 @dial.route('/download')
 @login_required
 def download():
-    return render_template('dial/download.html')
+    return render_template('dial/download.html', version=__version__)

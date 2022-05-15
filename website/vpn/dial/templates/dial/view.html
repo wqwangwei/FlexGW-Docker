@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
-{% block title %} VPN 拨号账号修改{% endblock %}
+{% block title %} {{ gettext('VPN Dial Account Modify') }} {% endblock %}
 
 {% block trail %}
-        <li><a href="/">Home</a></li>
-        <li>VPN</li>
-        <li class="current"><a href="{{ url_for('dial.index') }}">Dial</a></li>
+        <li><a href="/">{{ gettext('home') }}</a></li>
+        <li>{{ gettext('vpn') }}</li>
+        <li class="current"><a href="{{ url_for('dial.index') }}">{{ gettext('dial') }}</a></li>
 {% endblock trail %}
 
 {% block content %}
@@ -23,7 +23,7 @@
       {% endif %}
       {% endwith %}
       <div data-alert class="alert-box info">
-        注意：删除账号会重载VPN 服务，以确保被删除的账号断开连接。
+        {{ gettext('notice: after delete account, vpn service will reload to ensure connection using the account is disconnected.') }}
       </div>
       <form method="POST" action="{{ url_for('dial.id_settings', id=account.id) }}">
         <div class="row">
@@ -54,7 +54,7 @@
                 {% endif %}
               </div>
               <div class="small-3 columns">
-                <a href="#" id="showpass" class="postfix button">显示密码</a>
+                <a href="#" id="showpass" class="postfix button">{{ gettext('show password') }}</a>
               </div>
             </div>
           </div>

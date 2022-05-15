@@ -14,7 +14,7 @@
   <!-- start of login -->
     <div id="login" class="large-4 large-centered columns">
       <div class="header">
-        <h4>GateWay Login</h4>
+        <h4>{{ gettext('login') }}</h4>
       </div>
       <form method='POST' action='/login'>
         <div class="row">
@@ -26,7 +26,7 @@
             {{ form.account(class="error", value=form.account.value) }}
             <small class="error">{{ form.account.errors[0] }}</small>
             {% else %}
-            {{ form.account(placeholder="user") }}
+            {{ form.account(placeholder=gettext('username')) }}
             {% endif %}
           </div>
         </div>
@@ -39,13 +39,13 @@
             {{ form.password(class="error", value=form.password.value) }}
             <small class="error">{{ form.password.errors[0] }}</small>
             {% else %}
-            {{ form.password(placeholder="password") }}
+            {{ form.password(placeholder=gettext('password')) }}
             {% endif %}
           </div>
         </div>
         <div class="row">
           <div class="lagre-4 large-offset-3 columns">
-            <button type="submit" class="button tiny">登录</button>
+            <button type="submit" class="button tiny">{{ gettext('login') }}</button>
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           </div>
         </div>

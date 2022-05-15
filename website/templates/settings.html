@@ -4,9 +4,9 @@
     <!-- start of side nav -->
     <div class="large-2 columns">
       <ul class="side-nav">
-        <li><a href="/vpn">VPN</a></li>
-        <li><a href="/snat">SNAT</a></li>
-        <li class="active"><a href="/settings">Settings</a></li>
+        <li><a href="/vpn">{{ gettext('vpn') }}</a></li>
+        <li><a href="/snat">{{ gettext('snat') }}</a></li>
+        <li class="active"><a href="/settings">{{ gettext('settings') }}</a></li>
       </ul>
     </div>
     <!-- end of side nav -->
@@ -16,7 +16,7 @@
         <form class="large-12 columns">
           <div class="row">
             <div class="small-3 columns">
-              <label for="right-label" class="right inline">VPN Client IP Pool</label>
+              <label for="right-label" class="right inline">{{ gettext('vpn client ip pool') }}</label>
             </div>
             <div class="small-3 columns">
               <input type="text" id="right-label" placeholder="192.168.7.0/24">
@@ -26,7 +26,7 @@
           </div>
           <div class="row">
             <div class="small-3 columns">
-              <label for="right-label" class="right inline">SNAT Gateway</label>
+              <label for="right-label" class="right inline">{{ gettext('snat gateway') }}</label>
             </div>
             <div class="small-3 columns">
               <input type="text" id="right-label" placeholder="10.101.81.89">
@@ -36,7 +36,7 @@
           </div>
           <div class="row">
             <div class="small-3 columns large-offset-3">
-              <button class="tiny success">保存</button>
+              <button class="tiny success">{{ gettext('save') }}</button>
             </div>
           </div>
         </form>

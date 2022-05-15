@@ -1,4 +1,4 @@
-#!/usr/local/flexgw/python/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
     openvpn-auth

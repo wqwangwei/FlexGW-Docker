@@ -11,6 +11,8 @@
 from flask_wtf import Form
 from wtforms import TextField, ValidationError
 from wtforms.validators import Required, IPAddress
+from flask.ext.babel import lazy_gettext
+from wtforms import SubmitField
 
 
 def IPorNet(message=u"无效的IP 或网段！"):
@@ -23,7 +25,7 @@ def IPorNet(message=u"无效的IP 或网段！"):
             except:
                 raise ValidationError(message)
             if mask < 0 or mask > 32:
-                    raise ValidationError(message)
+                raise ValidationError(message)
         parts = ip.split('.')
         if len(parts) == 4 and all(x.isdigit() for x in parts):
             numbers = list(int(x) for x in parts)
@@ -41,3 +43,11 @@ class SnatForm(Form):
     gateway = TextField(u'转换后的IP',
                         validators=[Required(message=u'这是一个必选项！'),
                                     IPAddress(message=u'无效的IP 地址！')])
+
+
+class ConsoleForm(Form):
+
+    '''web console form'''
+    #: submit button
+    ensure = SubmitField(lazy_gettext("ensure"))
+    reset = SubmitField(lazy_gettext("reset"))

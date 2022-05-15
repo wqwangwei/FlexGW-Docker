@@ -6,14 +6,18 @@
     ECS VPN Website.
 """
 
-__version__ = '1.1.1'
+__version__ = '2.5.0'
 
 import os
 
 from flask import Flask
+from flask.ext.babel import Babel
+
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('websiteconfig.default_settings')
 app.config.from_pyfile('application.cfg', silent=True)
+app.debug = app.config['DEBUG']
+babel = Babel(app)
 
 import logging
 from logging import Formatter
@@ -45,15 +49,25 @@ CsrfProtect(app)
 
 import website.views
 
-from website.account.views import account
+from website.account.views import account, login
 from website.vpn.sts.views import sts
 from website.vpn.dial.views import dial
 from website.snat.views import snat
 from website.api.views import api
 from website.docs.views import docs
+from website.tcp.views import tcp
+from website.gre.views import gre
+
 app.register_blueprint(account)
 app.register_blueprint(sts)
 app.register_blueprint(dial)
 app.register_blueprint(snat)
 app.register_blueprint(api)
 app.register_blueprint(docs)
+app.register_blueprint(tcp)
+app.register_blueprint(gre)
+
+@babel.localeselector
+def get_locale():
+    from flask import request
+    return request.cookies.get("locale", app.config["BABEL_DEFAULT_LOCALE"])

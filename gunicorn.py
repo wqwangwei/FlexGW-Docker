@@ -1,6 +1,6 @@
 import os
 
-workers = 2
+workers = 1
 bind = '0.0.0.0:443'
 proc_name = 'website'
 pidfile = '%s/website.pid' % os.path.abspath(os.path.dirname(__file__))

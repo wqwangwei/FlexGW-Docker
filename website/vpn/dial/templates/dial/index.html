@@ -2,9 +2,9 @@
 {% block title %}VPN Dial{% endblock title%}
 
 {% block trail %}
-        <li><a href="/">Home</a></li>
-        <li>VPN</li>
-        <li class="current"><a href="{{ url_for('dial.index') }}">Dial</a></li>
+        <li><a href="/">{{ gettext('home') }}</a></li>
+        <li>{{ gettext('vpn') }}</li>
+        <li class="current"><a href="{{ url_for('dial.index') }}">{{ gettext('dial') }}</a></li>
 {% endblock trail %}
 
 {% block content %}
@@ -23,19 +23,19 @@
       {% endif %}
       {% endwith %}
       <div data-alert class="alert-box info">
-        注意：「状态」由于VPN 的keepalive 机制，会有1分钟左右的延时。
+        {{ gettext('notice: Because of keepalive of vpn, status may have a minute delay.') }}
       </div>
       <table>
         <thead>
           <tr>
-            <th>账号名</th>
-            <th>真实IP</th>
-            <th>虚拟IP</th>
-            <th>状态</th>
-            <th>Bytes Received</th>
-            <th>Bytes Sent</th>
-            <th>连接时间</th>
-            <th>账号创建时间</th>
+            <th>{{ gettext('account') }}</th>
+            <th>{{ gettext('real ip') }}</th>
+            <th>{{ gettext('virtual ip') }}</th>
+            <th>{{ gettext('status') }}</th>
+            <th>{{ gettext('bytes received') }}</th>
+            <th>{{ gettext('bytes sent') }}</th>
+            <th>{{ gettext('connection duration') }}</th>
+            <th>{{ gettext('created time') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -47,9 +47,9 @@
             <td>{{ account.vip }}</td>
             <td>
               {% if account.vip %}
-                <span class="success label">Online</span>
+                <span class="success label">{{ gettext('online')}}</span>
               {% else %}
-                <span class="secondary label">Offline</span>
+                <span class="secondary label">{{ gettext('offline') }}</span>
               {% endif %}
             </td>
             <td>{{ account.br }}</td>

@@ -9,12 +9,15 @@
 
 
 import sys
+import json
+import requests
 
 from flask import Blueprint, jsonify, current_app
 
 from flask.ext.login import login_required
 
 from website.services import exec_command
+from website.utils import ad
 from website.vpn.sts.services import VpnServer
 
 
@@ -53,3 +56,20 @@ def check_update():
             info = u"发现新版本：%s！" % (line.split(':')[1])
             return jsonify({"message": info})
     return jsonify({"message": u"已经是最新版本了！"}), 404
+
+
+@api.route("/ad/<ad_type>")
+def get_ads(ad_type):
+    ad_id = None
+    if ad_type == 'top':
+        ad_id = "AD1121"
+    elif ad_type == 'bottom':
+        ad_id = "AD1122"
+    ads = []
+    if ad_id is not None:
+        # url = ad.ad_url(ad_id, current_app.debug)
+        url = ad.ad_url(ad_id, False)
+        resp = requests.get(url)
+        if resp.status_code == 200:
+            ads = ad.convert_ads(json.loads(resp.text))
+    return jsonify({"ads": ads})

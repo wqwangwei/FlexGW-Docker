@@ -2,9 +2,9 @@
 {% block title %}VPN Console{% endblock title%}
 
 {% block trail %}
-        <li><a href="/">Home</a></li>
-        <li><a href="{{ url_for('sts.index') }}">VPN</a></li>
-        <li class="current"><a href="{{ url_for('sts.console') }}">VPN Console</a></li>
+        <li><a href="/">{{ gettext('home') }}</a></li>
+        <li><a href="{{ url_for('sts.index') }}">{{ gettext('vpn' )}}</a></li>
+        <li class="current"><a href="{{ url_for('sts.console') }}">{{ gettext('vpn console') }}</a></li>
 {% endblock trail %}
 
 {% block content %}
@@ -24,17 +24,19 @@
       {% endwith %}
       <div data-alert class="alert-box {% if status %} success {% else %} alert {% endif %}">
         {% if status %}
-        IPSec VPN 服务运行正常！
+        {{ gettext('ipsec vpn service is running') }}
         {% else %}
-        IPSec VPN 没有运行！
+        {{ gettext('ipsec vpn service is not running') }}
         {% endif %}
       </div>
       <form method="POST" action="{{ url_for('sts.console') }}">
         <div class="row">
           <div class="large-3 columns">
             <ul class="pricing-table">
-              <li class="title">启动VPN 服务</li>
-              <li class="description">启动VPN 服务。不会影响到已经运行的VPN 服务。</li>
+              <li class="title">{{ gettext('start vpn server') }}</li>
+              <li class="description">
+                {{ gettext('start ip sec vpn server.') }}
+              </li>
               <li class="cta-button">
               {% if status %}
               {{ form.start(class="alert tiny button disabled", disabled="disabled") }}
@@ -46,8 +48,10 @@
           </div>
           <div class="large-3 columns">
             <ul class="pricing-table">
-              <li class="title">停止VPN 服务</li>
-              <li class="description">停止VPN 服务。服务停止之后，所有已经连接的隧道都将中断。</li>
+              <li class="title">{{ gettext('stop vpn server') }}</li>
+              <li class="description">
+                {{ gettext('stop ip sec vpn server. all connected tunnel will be closed.') }}
+              </li>
               <li class="cta-button">
               {% if status %}
               {{ form.stop(class="alert tiny button") }}
@@ -58,8 +62,8 @@
           </div>
           <div class="large-3 columns end">
             <ul class="pricing-table">
-              <li class="title">配置下发&重载</li>
-              <li class="description">下发新的VPN 配置，并使之生效。建议在修改VPN 配置之后再进行使用。</li>
+              <li class="title">{{ gettext('config install & reload') }}</li>
+              <li class="description">{{ gettext('install new vpn config and make it effect. recommend using this after edit vpn config.') }}</li>
               <li class="cta-button">
               {% if status %}
               {{ form.re_load(class="alert tiny button") }}

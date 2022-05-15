@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
-{% block title %}VPN 新增拨号{% endblock title%}
+{% block title %}{{ gettext('create vpn dial') }}{% endblock title%}
 
 {% block trail %}
-        <li><a href="/">Home</a></li>
-        <li>VPN</li>
-        <li class="current"><a href="{{ url_for('dial.index') }}">Dial</a></li>
+        <li><a href="/">{{ gettext('home') }}</a></li>
+        <li>{{ gettext('vpn') }}</li>
+        <li class="current"><a href="{{ url_for('dial.index') }}">{{ gettext('dial') }}</a></li>
 {% endblock trail %}
 
 {% block content %}
@@ -23,7 +23,7 @@
       {% endif %}
       {% endwith %}
       <div data-alert class="alert-box info">
-        注意：「账号名」只可包含如下字符：数字、字母、下划线。
+        {{ gettext('notice: "account" only contains number, alpha, underline.') }}
       </div>
       <form method="POST" action="{{ url_for('dial.add') }}">
         <div class="row">
@@ -56,7 +56,7 @@
 
         <div class="row">
           <div class="large-3 columns large-offset-3">
-            <button class="tiny success">保存</button>
+            <button class="tiny success">{{ gettext('save') }}</button>
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           </div>
         </div>

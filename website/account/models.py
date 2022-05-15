@@ -13,6 +13,7 @@ from simplepam import authenticate
 
 from flask import current_app
 
+from website import db
 from website.services import exec_command
 
 
@@ -28,17 +29,20 @@ class User(object):
     def __repr__(self):
         return '<User {0}:{1}>'.format(self.id, self.username)
 
+    @property
     def is_active(self):
         return True
 
+    @property
     def is_authenticated(self):
         return True
 
+    @property
     def is_anonymous(self):
         return False
 
     def get_id(self):
-        return unicode(self.id)
+        return str(self.id)
 
     @classmethod
     def query_filter_by(cls, id=None, username=None):
@@ -67,8 +71,36 @@ class User(object):
 
     @classmethod
     def check_auth(cls, username, password):
-        r = authenticate(str(username), str(password), service='sshd')
+        # r = authenticate(str(username), str(password), service='sshd')
+        r = authenticate(str(username), str(password))
         if not r:
             current_app.logger.error('[Account System]: %s pam auth failed return: %s',
                                      username, r)
         return r
+
+
+class UserDetails(db.Model):
+
+    '''user details.'''
+    __tablename__ = 'user_details'
+
+    username = db.Column(db.String(80), primary_key=True)
+    otp_key = db.Column(db.String(16))
+    otp_enabled = db.Column(db.Boolean, default=False)
+    language = db.Column(db.String(10), default="en")
+
+    def __init__(self, username, otp_key=None, otp_enabled=False, language=None):
+        self.username = username
+        self.otp_key = otp_key
+        self.otp_enabled = otp_enabled
+        if language is None:
+            self.language = current_app.config['BABEL_DEFAULT_LOCALE']
+        else:
+            self.language = language
+
+    def __repr__(self):
+        return '<User Detail %s>' % self.name
+
+    @property
+    def get_id(self):
+        return unicode(self.username)

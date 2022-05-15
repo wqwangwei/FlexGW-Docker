@@ -65,7 +65,7 @@ $OPENSSL req -batch -days $CA_EXPIRE -nodes -new -newkey rsa:$KEY_SIZE -x509 -ke
 #create dh-param
 #
 
-$OPENSSL dhparam -out ${KEY_DIR}/dh${KEY_SIZE}.pem ${KEY_SIZE}
+# $OPENSSL dhparam -out ${KEY_DIR}/dh${KEY_SIZE}.pem ${KEY_SIZE}
 
 #
 #create server certificate

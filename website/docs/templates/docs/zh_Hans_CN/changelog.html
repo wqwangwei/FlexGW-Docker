@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block title %}Docs{% endblock %}
+
+{% block trail %}
+        <li><a href="/">Home</a></li>
+        <li>Docs</li>
+        <li class="current"><a href="{{ url_for('docs.changelog') }}">ChangeLog</a></li>
+{% endblock trail %}
+
+{% block content %}
+    {% include "docs/zh_Hans_CN/sidenav.html" %}
+
+    <!-- start of issue table -->
+    <div class="large-10 columns">
+      <div class="row">
+        <div class="large-12 columns">
+          <div class="panel">
+            <h3>ChangeLog</h3>
+            <hr />
+            <h5>1.2.0 － 2015.09.09</h5>
+            <ul>
+              <li>支持 TCP 隧道功能</li>
+            </ul>
+            <h5>1.1.0 － 2014.10.11</h5>
+            <ul>
+              <li>拨号VPN：查看、修改账号时，密码默认隐藏，支持手工显示。</li>
+              <li>拨号VPN：可配置支持客户端间相互通信、单账号同时多个客户端在线。</li>
+              <li>拨号VPN：可配置通信协议为"UDP"或"TCP"。</li>
+              <li>更新文档描述，增加Classic 网络环境应用场景事例。</li>
+            </ul>
+            <h5>1.0.0 － 2014.09.05</h5>
+            <ul>
+              <li>首次发布，支持IPSec VPN、拨号VPN、SNAT 功能。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end of issue table -->
+{% endblock content %}

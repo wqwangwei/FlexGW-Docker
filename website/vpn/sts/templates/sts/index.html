@@ -2,9 +2,9 @@
 {% block title %}VPN Site-to-Site{% endblock title%}
 
 {% block trail %}
-        <li><a href="/">Home</a></li>
-        <li><a href="{{ url_for('sts.index') }}">VPN</a></li>
-        <li class="current"><a href="{{ url_for('sts.index') }}">Site-to-Site</a></li>
+        <li><a href="/">{{ gettext('home') }}</a></li>
+        <li><a href="{{ url_for('sts.index') }}">{{ gettext('vpn' )}}</a></li>
+        <li class="current"><a href="{{ url_for('sts.index') }}">{{ gettext('ip sec') }}</a></li>
 {% endblock trail %}
 
 {% block content %}
@@ -25,14 +25,15 @@
       <table>
         <thead>
           <tr>
-            <th>隧道ID</th>
-            <th>启动类型</th>
-            <th>本端子网</th>
-            <th>对端EIP</th>
-            <th>对端子网</th>
-            <th>状态</th>
-            <th>查看</th>
-            <th>操作</th>
+            <th>{{ gettext('tunnel id')}}</th>
+            <th>{{ gettext('ike version') }}</th>
+            <th>{{ gettext('auto connect') }}</th>
+            <th>{{ gettext('local cidr') }}</th>
+            <th>{{ gettext('remote ip') }}</th>
+            <th>{{ gettext('remote cidr') }}</th>
+            <th>{{ gettext('status') }}</th>
+            <th>{{ gettext('view') }}</th>
+            <th>{{ gettext('operations') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -40,7 +41,13 @@
           {% for tunnel in tunnels %}
           <tr>
             <td><a href="{{ url_for('sts.settings', id=tunnel.id) }}">{{ tunnel.name }}</a></td>
-            <td>{% if tunnel.rules.auto == 'add' %}手工连接{% else %}服务启动自动连接{% endif %}</td>
+            <td>{{ tunnel.rules.keyexchange }}</td>
+            <td>
+              {% if tunnel.rules.auto == 'add' %}
+              {{ gettext('manual') }}
+              {% else %}
+              {{ gettext('auto') }}
+              {% endif %}</td>
             <td>{{ tunnel.rules.leftsubnet }}</td>
             <td>{{ tunnel.rules.right }}</td>
             <td>{{ tunnel.rules.rightsubnet }}</td>
@@ -52,7 +59,7 @@
               {% endif %}
             </td>
             <td>
-              <a href="{{ url_for('sts.flow', id=tunnel.id) }}" class="bitty button">流量</a>
+              <a href="{{ url_for('sts.flow', id=tunnel.id) }}" class="bitty button">{{ gettext('flow') }}</a>
             </td>
             <td>
               <form method="POST" action="{{ url_for('sts.updown') }}">

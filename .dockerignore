@@ -1,0 +1,14 @@
+# Byte-compiled / optimized / DLL files
+*.py[cod]
+.git
+# logs
+.DS_Store
+*.swp
+*.log
+*.pid
+logs/*
+!logs/.gitkeep
+instance/*
+!instance/application.cfg 
+# !instance/website.db do not copy database file to docker
+packaging/

@@ -13,6 +13,7 @@ import sys
 from datetime import datetime
 
 from flask import render_template, flash, current_app
+from flask.ext.babel import gettext
 
 from website import db
 from website.services import exec_command
@@ -21,8 +22,9 @@ from website.vpn.dial.helpers import exchange_maskint
 
 
 class VpnConfig(object):
+
     ''' read and set config for vpn config file.'''
-    conf_file = '/etc/openvpn/server/server.conf'
+    conf_file = '/etc/openvpn/server.conf'
     client_conf_file = '/usr/local/flexgw/rc/openvpn-client.conf'
 
     conf_template = 'dial/server.conf'
@@ -38,19 +40,6 @@ class VpnConfig(object):
             return data
         return None
 
-
-    def _get_cert_content(self):
-        try:
-            with open('/etc/openvpn/ca.crt','r+') as f:
-            data=f.read()
-        except Exception as e:
-            raise e
-        r
-        if data:
-            return data
-        return None
-
-
     def _commit_conf_file(self):
         r_data = self._get_settings()
         r_ipool = r_data.ipool
@@ -58,8 +47,6 @@ class VpnConfig(object):
         proto = r_data.proto
         c2c = r_data.c2c
         duplicate = r_data.duplicate
-        crt_content = self._get_cert_content()
-
         ipool = "%s %s" % (r_ipool.split('/')[0].strip(),
                            exchange_maskint(int(r_ipool.split('/')[1].strip())))
         subnets = ["%s %s" % (i.split('/')[0].strip(),
@@ -67,7 +54,7 @@ class VpnConfig(object):
                    for i in r_subnet.split(',')]
         server_data = render_template(self.conf_template, ipool=ipool, subnets=subnets,
                                       c2c=c2c, duplicate=duplicate, proto=proto)
-        client_data = render_template(self.client_conf_template, proto=proto,crt_content=crt_content)
+        client_data = render_template(self.client_conf_template, proto=proto)
         try:
             with open(self.conf_file, 'w') as f:
                 f.write(server_data)
@@ -122,9 +109,10 @@ class VpnConfig(object):
 
 
 class VpnServer(object):
+
     """vpn server console"""
     log_file = '/etc/openvpn/openvpn-status.log'
-    pid_file = '/var/run/openvpn-server/server.pid'
+    pid_file = '/var/run/openvpn/server.pid'
 
     def __init__(self):
         self.cmd = None
@@ -142,7 +130,7 @@ class VpnServer(object):
         except:
             current_app.logger.error('[Dial Services]: exec_command error: %s:%s', cmd,
                                      sys.exc_info()[1])
-            flash(u'VPN 程序异常，无法调用，请排查操作系统相关设置！', 'alert')
+            flash(gettext("OpenVPN is crashed, please contact your system admin."), 'alert')
             return False
         #: store cmd info
         self.cmd = cmd
@@ -153,49 +141,49 @@ class VpnServer(object):
         if r['return_code'] == 0:
             return True
         if message:
-            flash(message % r['stderr'], 'alert')
+            flash(message + r['stderr'], 'alert')
         current_app.logger.error('[Dial Services]: exec_command return: %s:%s:%s', cmd,
                                  r['return_code'], r['stderr'])
         return False
 
     def _reload_conf(self):
-        cmd = ['systemctl', 'restart', 'openvpn-server@server']
-        message = u"VPN 服务重载失败！%s"
+        cmd = ['supervisorctl', 'restart', 'openvpn']
+        message = gettext('vpn service reload failed!')
         return self._exec(cmd, message)
 
     def _package_client_conf(self):
         cmd = ['/usr/local/flexgw/scripts/packconfig', 'all']
-        message = u"客户端配置文件打包失败！"
+        message = gettext('client config packaging failed!')
         return self._exec(cmd, message)
 
     @property
     def start(self):
         if self.status:
-            flash(u'服务已经启动！', 'info')
+            flash(gettext('service already started!'), 'info')
             return False
-        cmd = ['systemctl', 'start', 'openvpn-server@server']
-        message = u"VPN 服务启动失败！%s"
+        cmd = ['supervisorctl', 'start', 'openvpn']
+        message = gettext('vpn service start failed!')
         return self._exec(cmd, message)
 
     @property
     def stop(self):
         if not self.status:
-            flash(u'服务已经停止！', 'info')
+            flash(gettext('service already stopped.'), 'info')
             return False
-        cmd = ['systemctl', 'stop', 'openvpn-server@server']
-        message = u"VPN 服务停止失败！%s"
+        cmd = ['supervisorctl', 'stop', 'openvpn']
+        message = gettext('vpn service stop failed')
         return self._exec(cmd, message)
 
     @property
     def reload(self):
         tunnel = VpnConfig()
         if not tunnel.commit():
-            message = u'VPN 服务配置文件修改失败，请重试！'
+            message = gettext('vpn config file set failed, please retry!')
             flash(message, 'alert')
             return False
         self._package_client_conf()
         if not self.status:
-            flash(u'设置成功！VPN 服务未启动，请通过「VPN服务管理」启动VPN 服务。', 'alert')
+            flash(gettext('vpn config file set successed, vpn service is not running.'), 'alert')
             return False
         if self._reload_conf():
             return True
@@ -203,22 +191,24 @@ class VpnServer(object):
 
     @property
     def status(self):
-        current_app.logger.info("检查PID {}".format(self.pid_file))
-        if not os.path.isfile(self.pid_file):
-            return False
+        # if not os.path.isfile(self.pid_file):
+        #     return False
 
-        try:
-            with open(self.pid_file) as f:
-                raw_data = f.readlines()
-        except:
-            current_app.logger.error('[Dial Services]: open pid file error: %s:%s',
-                                     self.pid_file, sys.exc_info()[1])
-            return False
-        if not raw_data:
-            return False
-        pid = int(raw_data[0])
-        cmd = ['kill', '-0', str(pid)]
-        return self._exec(cmd)
+        # try:
+        #     with open(self.pid_file) as f:
+        #         raw_data = f.readlines()
+        # except:
+        #     current_app.logger.error('[Dial Services]: open pid file error: %s:%s',
+        #                              self.pid_file, sys.exc_info()[1])
+        #     return False
+        # if not raw_data:
+        #     return False
+        # pid = int(raw_data[0])
+        # cmd = ['kill', '-0', str(pid)]
+        self._exec(['supervisorctl', 'status', 'openvpn'])
+        if self.c_stdout.find('Running') >= 0:
+            return True
+        return False
 
     def account_status(self, account_name):
         result = []
@@ -235,7 +225,7 @@ class VpnServer(object):
             if line.startswith('CLIENT_LIST,%s,' % account_name):
                 data = line.split(',')
                 result.append({'rip': '%s' % data[2], 'vip': '%s' % data[3],
-                              'br': data[4], 'bs': data[5], 'ct': data[7]})
+                               'br': data[4], 'bs': data[5], 'ct': data[7]})
         return result or False
 
     def tunnel_traffic(self, tunnel_name):
@@ -263,6 +253,7 @@ def get_accounts(id=None, status=False):
                         account['vip'] = status['vip']
                         account['br'] = status['br']
                         account['bs'] = status['bs']
+                        # account['ct'] = datetime.fromtimestamp(int(status['ct'])).strftime('%Y-%m-%d %H:%M:%S')
                         account['ct'] = status['ct']
                         result.append(copy.deepcopy(account))
                 else:

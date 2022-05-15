@@ -2,9 +2,9 @@
 {% block title %}VPN Dial Settings{% endblock title%}
 
 {% block trail %}
-        <li><a href="/">Home</a></li>
-        <li>VPN</li>
-        <li class="current"><a href="{{ url_for('dial.index') }}">Dial</a></li>
+        <li><a href="/">{{ gettext('home') }}</a></li>
+        <li>{{ gettext('vpn') }}</li>
+        <li class="current"><a href="{{ url_for('dial.index') }}">{{ gettext('dial') }}</a></li>
 {% endblock trail %}
 
 {% block content %}
@@ -23,8 +23,10 @@
       {% endif %}
       {% endwith %}
       <div data-alert class="alert-box info">
-        虚拟IP 地址池: 为VPN Server 分配给客户端的虚拟IP 地址池。子网网段：为客户端连接之后可以访问的子网网段。可以填写多个子网，用英文「,」分割。<br /><br />
-        注：保存修改后，会重载VPN 服务，所有客户端将会自动断开重连。
+        {{ gettext('virtual ip pool: ip pool allocated for vpn client. subnet cidr: cidr for route when client connection, seperated by ",".') }}
+        <br/>
+        <br/>
+        {{ gettext('notes: when you save the vpn config, vpn server will reload and all connections will reconnect.') }}
       </div>
       <form method="POST" action="{{ url_for('dial.settings') }}">
         <div class="row">
@@ -84,7 +86,7 @@
 
         <div class="row">
           <div class="large-3 columns large-offset-3">
-            <button class="tiny success">保存</button>
+            <button class="tiny success">{{ gettext('save') }}</button>
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           </div>
         </div>

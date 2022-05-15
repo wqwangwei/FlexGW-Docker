@@ -9,7 +9,7 @@
 
 from flask import g, redirect, url_for
 
-from flask.ext.login import login_required, current_user
+from flask_login import login_required, current_user
 
 from website import app
 
@@ -17,7 +17,7 @@ from website import app
 @app.before_request
 def before_request():
     g.account = None
-    if not current_user.is_anonymous():
+    if not current_user.is_anonymous:
         g.account = current_user.username
 
 

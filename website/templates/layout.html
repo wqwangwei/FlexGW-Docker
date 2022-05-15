@@ -38,19 +38,21 @@
           <li class="name">
             <h1><a href="/"><i class="fi-home"></i></a></h1>
           </li>
-          <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+          <li class="toggle-topbar menu-icon"><a href="#">{{ gettext('menu') }}</a></li>
         </ul>
         <section class="top-bar-section">
           <!-- Right Nav Section -->
           <ul class="left">
-            <li{% if 'sts.' in request.endpoint %} class="active" {% endif %}><a href="/vpn/sts/">IPSec VPN</a></li>
-            <li{% if 'dial.' in request.endpoint %} class="active" {% endif %}><a href="/vpn/dial/">拨号 VPN</a></li>
-            <li{% if 'snat.' in request.endpoint %} class="active" {% endif %}><a href="/snat">SNAT</a></li>
+            <li{% if 'sts.' in request.endpoint %} class="active" {% endif %}><a href="/vpn/sts/">{{ gettext('ipsec vpn') }}</a></li>
+            <li{% if 'dial.' in request.endpoint %} class="active" {% endif %}><a href="/vpn/dial/">{{ gettext('dial vpn') }}</a></li>
+            <li{% if 'snat.' in request.endpoint %} class="active" {% endif %}><a href="/snat">{{ gettext('snat') }}</a></li>
+            <li{% if 'tcp.' in request.endpoint %} class="active" {% endif %}><a href="/tcp">{{ gettext('tcp tunnel') }}</a></li>
+            <li{% if 'gre.' in request.endpoint %} class="active" {% endif %}><a href="/gre">{{ gettext('gre tunnel') }}</a></li>
           </ul>
           <ul class="right">
-            <li{% if 'docs.' in request.endpoint %} class="active" {% endif %}><a href="/docs"><i class="fi-page-doc"> </i>文档</a></li>
-            <li><a href="#" id="checkupdate">检查更新</a></li>
-            <li><a href="/logout"><i class="fi-torso-business"> </i>{{ g.account }} 退出</a></li>
+            <li{% if 'docs.' in request.endpoint %} class="active" {% endif %}><a href="/docs"><i class="fi-page-doc"> </i>{{ gettext('docs') }}</a></li>
+            <li><a href="/settings"><i class="fi-torso-business"> </i>{{ g.account }} {{ gettext('settings') }}</a></li>
+            <li><a href="/logout">{{ gettext('logout') }}</a></li>
           </ul>
         </section>
       </nav>
