@@ -17,6 +17,9 @@ from website import db
 from website.tcp.models import Connection
 from sqlalchemy import and_
 
+from website.utils.iptables import save_nat_rule
+from website.services import exec_command
+
 iptables_command_prerouting = 'iptables -t nat {command} PREROUTING -p tcp --dport {local_port} -j DNAT --to-destination {dest_ip}:{dest_port};'
 iptables_command_postrouting = 'iptables -t nat {command} POSTROUTING -d {dest_ip} -p tcp --dport {dest_port} -j MASQUERADE'
 
@@ -32,11 +35,12 @@ def create_connection(local_port, dest_ip, dest_port):
     if con is None:
         add_command_prerouting = iptables_command_prerouting.format(command='-A', local_port=local_port, dest_ip=dest_ip, dest_port=dest_port)
         add_command_postrouting = iptables_command_postrouting.format(command='-A', local_port=local_port, dest_ip=dest_ip, dest_port=dest_port)
-        execute_command(add_command_prerouting)
-        execute_command(add_command_postrouting)
+        exec_command(add_command_prerouting)
+        exec_command(add_command_postrouting)
         connection = Connection(dest_ip, dest_port, local_port)
         db.session.add(connection)
         db.session.commit()
+        save_nat_rule()
         return connection
 
 
@@ -45,14 +49,11 @@ def delete_connection(connection_id):
     if connection is not None:
         del_command_prerouting = iptables_command_prerouting.format(command='-D', local_port=connection.local_port, dest_ip=connection.dest_ip, dest_port=connection.dest_port)
         del_command_postrouting = iptables_command_postrouting.format(command='-D', local_port=connection.local_port, dest_ip=connection.dest_ip, dest_port=connection.dest_port)
-        execute_command(del_command_prerouting)
-        execute_command(del_command_postrouting)
+        exec_command(del_command_prerouting)
+        exec_command(del_command_postrouting)
         Connection.query.filter(Connection.id == connection_id).delete()
         db.session.commit()
-
-
-def execute_command(command):
-    return subprocess.Popen(command.split())
+        save_nat_rule()
 
 
 def _iptables_get_dnat_rules(message=True):
@@ -100,15 +101,16 @@ def ensure_iptables():
         else:
             add_command_prerouting = iptables_command_prerouting.format(command='-A', local_port=i[0], dest_ip=i[1], dest_port=i[2])
             add_command_postrouting = iptables_command_postrouting.format(command='-A', local_port=i[0], dest_ip=i[1], dest_port=i[2])
-            execute_command(add_command_prerouting)
-            execute_command(add_command_postrouting)
+            exec_command(add_command_prerouting)
+            exec_command(add_command_postrouting)
 
     # 去除iptables中存在但数据库中不存在的数据
     for i in rules_iptable:
         del_command_prerouting = iptables_command_prerouting.format(command='-D', local_port=i[0], dest_ip=i[1], dest_port=i[2])
         del_command_postrouting = iptables_command_postrouting.format(command='-D', local_port=i[0], dest_ip=i[1], dest_port=i[2])
-        execute_command(del_command_prerouting)
-        execute_command(del_command_postrouting)
+        exec_command(del_command_prerouting)
+        exec_command(del_command_postrouting)
+    save_nat_rule()
 
 
 def reset_iptables():

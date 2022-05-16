@@ -13,6 +13,8 @@ from threading import Timer
 
 
 def exec_command(cmd, timeout=5, stdout=subprocess.PIPE):
+    if isinstance(cmd, str):
+        cmd = cmd.split()
     proc = subprocess.Popen(cmd, stdout=stdout,
                             stderr=subprocess.PIPE)
     # settings exec timeout

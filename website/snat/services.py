@@ -16,6 +16,7 @@ from flask.ext.babel import gettext
 from website.services import exec_command
 from website.snat.models import SNAT
 from website import db
+from website.utils.iptables import save_nat_rule
 
 
 def iptables_get_snat_rules(message=True):
@@ -98,29 +99,22 @@ def _iptables_set_snat_rules(method, source, gateway, message=True):
         return False
     #: add rule to iptables
     cmd = 'iptables -t nat %s POSTROUTING -s %s -j SNAT --to-source %s' % (methods[method], source, gateway)
-    save_rules = 'iptables-save -t nat'
+   
     try:
-        with open('/usr/local/flexgw/instance/snat-rules.iptables', 'w') as f:
-            results = exec_command(cmd.split()), exec_command(save_rules.split(), stdout=f)
+        results = exec_command(cmd.split())
+        if results['return_code'] != 0  and message:
+            message = gettext("set rule failed: %(err)s", err=results['stderr'])
+            flash(message, 'alert')
+            current_app.logger.error('[SNAT]: exec_command return: %s:%s:%s', cmd,
+                                 results['return_code'], results['stderr'])
+            return False
     except:
         current_app.logger.error('[SNAT]: exec_command error: %s:%s', cmd,
                                  sys.exc_info()[1])
         if message:
             flash(gettext('iptables crashed, please contact your system admin.'), 'alert')
         return False
-
-    #: check result
-    for r, c in zip(results, [cmd, save_rules]):
-        if r['return_code'] == 0:
-            continue
-        elif message:
-            message = gettext("set rule failed: %(err)s", err=r['stderr'])
-            flash(message, 'alert')
-        current_app.logger.error('[SNAT]: exec_command return: %s:%s:%s', c,
-                                 r['return_code'], r['stderr'])
-        return False
-
-    return True
+    return save_nat_rule()
 
 
 def ensure_iptables():
