@@ -91,7 +91,7 @@ server.conf 配置文件，由/usr/local/flexgw/website/vpn/dial/templates/dial 
 Docker 镜像
 
 ```
-docker run  --name flexgw6  -p 4443:443  -d   willclond/flexgw:v1
+docker run  --name flexgw6  -p 4443:443  -d   hualv/flexgw:latest
 ```
 访问地址：https://ip:4443 
 
