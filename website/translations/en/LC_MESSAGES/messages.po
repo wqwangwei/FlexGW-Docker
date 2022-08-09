@@ -642,7 +642,7 @@ msgstr "Service running."
 
 #: website/vpn/dial/templates/dial/console.html:29
 msgid "service is not running."
-msgstr "Service running."
+msgstr "Service  is not running."
 
 #: website/vpn/dial/templates/dial/console.html:36
 msgid "start vpn service"
