@@ -100,7 +100,7 @@ function create_net_device(){
 
 function create_user(){
     cd "$BASE_PATH"
-    grep "^${DEFAULT_PASSWORD}:" /etc/passwd >/dev/null 2>&1
+    grep "^${DEFAULT_USER}:" /etc/passwd >/dev/null 2>&1
     if [ $? -ne 0 ]; then
         useradd -m -s /bin/bash "${DEFAULT_USER}"
         echo "${DEFAULT_USER}:${DEFAULT_PASSWORD}" | chpasswd
