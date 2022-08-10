@@ -31,3 +31,5 @@ services:
 ```
 访问地址：https://ip:4443 login:admin password:password
 
+## SNAT配置
+需要设置VPC默认路由0.0.0.0指向到当前IP
