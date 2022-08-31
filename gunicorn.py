@@ -1,7 +1,7 @@
 import os
 
 workers = 1
-bind = '0.0.0.0:443'
+bind = '0.0.0.0:12345'
 proc_name = 'website'
 pidfile = '%s/website.pid' % os.path.abspath(os.path.dirname(__file__))
 accesslog = '%s/logs/gunicorn-access.log' % os.path.abspath(os.path.dirname(__file__))

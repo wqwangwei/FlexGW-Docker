@@ -27,11 +27,11 @@ export KEY_EXPIRE=3650
 # which will be placed in the certificate.
 # Don't leave any of these fields blank.
 export KEY_COUNTRY="CN"
-export KEY_PROVINCE="ZJ"
-export KEY_CITY="HZ"
-export KEY_ORG="Flex GateWay"
-export KEY_EMAIL="me@myhost.mydomain"
-export KEY_OU="Flex GateWay"
+export KEY_PROVINCE="TJ"
+export KEY_CITY="TJ"
+export KEY_ORG="GateWay"
+export KEY_EMAIL="wqwangwei@gmail.com"
+export KEY_OU="GateWay"
 
 # X509 Subject Field
 export KEY_NAME="Flex GateWay"

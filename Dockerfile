@@ -36,7 +36,7 @@ RUN set -ex \
 		/docker-entrypoint.sh \
 		/usr/local/bin/supervisorctl
 
-EXPOSE 443 500 4500 1194 9001
+EXPOSE 12345 500 4500 23451 9001
 # ipsec 端口号 500 4500
 # openvpn端口号 1194
 # supervisord端口号 9001
